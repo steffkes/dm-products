@@ -2,6 +2,7 @@ import jsonlines
 import itertools
 import datetime
 import scrapy
+import os
 from scrapy.item import Item, Field
 
 
@@ -16,12 +17,15 @@ class AvailabilityItem(Item):
 class AvalabilitySpider(scrapy.Spider):
     name = "availability"
     date = datetime.date.today().isoformat()
+    root = os.path.dirname(__file__)
 
     custom_settings = {
         # "JOBDIR": "/app/jobs/availability/",
         # "DOWNLOAD_DELAY": 0.25,
         "FEEDS": {
-            "file:///app/data/%(name)s/%(date)s.jsonl.gz": {
+            "file://"
+            + root
+            + "/data/%(name)s/%(date)s.jsonl.gz": {
                 "format": "jsonlines",
                 "postprocessing": ["scrapy.extensions.postprocessing.GzipPlugin"],
                 "gzip_compresslevel": 5,
